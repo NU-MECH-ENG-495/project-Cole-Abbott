@@ -1,0 +1,74 @@
+class SocialMediaAccount
+{
+public:
+    SocialMediaAccount(std::string name, std::string username, std::string bio);
+    ~SocialMediaAccount();
+
+    void addFollower(SocialMediaAccount &follower);
+    void addFollowing(SocialMediaAccount &following);
+    void addPost(Post &post);
+
+    void removeFollower(SocialMediaAccount &follower);
+    void removeFollowing(SocialMediaAccount &following);
+    void removePost(Post &post);
+
+private:
+    std::string m_name;
+    std::string m_username;
+    
+    std::string m_bio;
+    
+    vector<SocialMediaAccount> m_followers;
+    vector<SocialMediaAccount> m_following;
+
+    vector<Post> m_posts;
+
+};
+
+class Post
+{
+public:
+    Post(std::string content, SocialMediaAccount &author);
+    ~Post();
+
+private:
+    std::string m_content;
+    std::string m_timestamp;
+    SocialMediaAccount m_author;
+    vector<SocialMediaAccount> m_likes;
+    vector<Comment> m_comments;
+};
+
+class Comment
+{
+public:
+    Comment(std::string content, SocialMediaAccount &author, Post &post);
+    ~Comment();
+
+private:
+    std::string m_content;
+    std::string m_timestamp;
+    SocialMediaAccount m_author;
+    Post m_post;
+    vector<SocialMediaAccount> m_likes;
+};
+
+
+class SocialMediaPlatform
+{
+public:
+    SocialMediaPlatform();
+    ~SocialMediaPlatform();
+
+    void addAccount(SocialMediaAccount &account);
+    void removeAccount(SocialMediaAccount &account);
+    void addPost(Post &post);
+    void removePost(Post &post);
+    void addComment(Comment &comment);
+    void removeComment(Comment &comment);
+
+private:
+    vector<SocialMediaAccount> m_accounts;
+    vector<Post> m_posts;
+    vector<Comment> m_comments;
+};
