@@ -1,0 +1,5 @@
+add_test([=[StringTest.BasicTests]=]  /Users/cole/code/ME495/testProject/build/tests/unit_tests [==[--gtest_filter=StringTest.BasicTests]==] --gtest_also_run_disabled_tests)
+set_tests_properties([=[StringTest.BasicTests]=]  PROPERTIES WORKING_DIRECTORY /Users/cole/code/ME495/testProject/build/tests SKIP_REGULAR_EXPRESSION [==[\[  SKIPPED \]]==])
+add_test([=[StringTest.SpecialCharacters]=]  /Users/cole/code/ME495/testProject/build/tests/unit_tests [==[--gtest_filter=StringTest.SpecialCharacters]==] --gtest_also_run_disabled_tests)
+set_tests_properties([=[StringTest.SpecialCharacters]=]  PROPERTIES WORKING_DIRECTORY /Users/cole/code/ME495/testProject/build/tests SKIP_REGULAR_EXPRESSION [==[\[  SKIPPED \]]==])
+set(  unit_tests_TESTS StringTest.BasicTests StringTest.SpecialCharacters)
