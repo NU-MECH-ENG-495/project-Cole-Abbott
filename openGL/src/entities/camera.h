@@ -40,7 +40,7 @@ public:
         pitch = _pitch;
     }
 
-    glm::mat4 cameraView()
+    glm::mat4 cameraView() const
     {
         return glm::lookAt(cameraPos, cameraPos + cameraFront, cameraUp);
     }
