@@ -12,13 +12,13 @@ public:
     Game();
     ~Game();
     void run();
+    Player* player;
 
 private:
     void update();
     void render();
 
     Window* window;
-    Player* player;
     Renderer* renderer;
 };
 

@@ -9,6 +9,7 @@
 #include "entities/camera.h"
 #include "entities/player.h"
 #include "graphics/shader.h"
+
 // #include "graphics/renderer.h"
 
 // #define STB_IMAGE_IMPLEMENTATION
@@ -23,11 +24,14 @@ public:
     void swapBuffers();
     bool shouldClose();
     void processInput(Player& player);
-
+    void setUserPointer(void* ptr);
+    
+    
     int width, height;
-
-private: 
+    
+    private: 
     static void framebuffer_size_callback(GLFWwindow *window, int width, int height);
+    static void mouse_callback(GLFWwindow* window, double xpos, double ypos);
 
     GLFWwindow* window;
     std::string title;

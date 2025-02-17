@@ -14,23 +14,33 @@ public:
     float yaw, pitch;
 
     Player(glm::vec3 _playerPos, float _yaw, float _pitch)
-        : playerPos(_playerPos), yaw(_yaw), pitch(_pitch), ourCamera(_playerPos, _yaw, _pitch) {
+        : playerPos(_playerPos), yaw(_yaw), pitch(_pitch), ourCamera(_playerPos, _yaw, _pitch)
+    {
     }
 
-    glm::mat4 getCameraView() const {
+    glm::mat4 getCameraView() const
+    {
         return ourCamera.cameraView();
     }
 
-    void processMouseMovement(double xpos, double ypos) {
+    void processMouseMovement(double xpos, double ypos)
+    {
         ourCamera.mouseMovement(xpos, ypos);
     }
 
-    void processKeyboardMovement(Camera_Movement direction, float deltaTime) {
+    void processKeyboardMovement(Camera_Movement direction, float deltaTime)
+    {
         ourCamera.keyboardMovement(direction, deltaTime);
     }
 
-    void update() {
+    void update()
+    {
         playerPos = ourCamera.cameraPos;
+    }
+
+    void mouse_callback(GLFWwindow *window, double xpos, double ypos)
+    {
+        processMouseMovement(xpos, ypos);
     }
 
 private:

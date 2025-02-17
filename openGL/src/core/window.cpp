@@ -1,4 +1,5 @@
 #include "window.h"
+#include "game.h"
 
 Window::Window(int width, int height, const std::string &title)
     : width(width), height(height), title(title)
@@ -39,6 +40,7 @@ Window::Window(int width, int height, const std::string &title)
     glEnable(GL_DEPTH_TEST); // enable depth testing
 
     glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED); 
+    glfwSetCursorPosCallback(window, mouse_callback);            // set mouse movement callback
 }
 
 
@@ -98,4 +100,16 @@ bool Window::shouldClose()
 {
     return glfwWindowShouldClose(window);
     // return false;
+}
+
+
+void Window::setUserPointer(void* ptr) {
+    glfwSetWindowUserPointer(window, ptr);
+}
+
+void Window::mouse_callback(GLFWwindow* window, double xpos, double ypos) {
+    Game* game = static_cast<Game*>(glfwGetWindowUserPointer(window));  // Retrieve Game instance
+    if (game) {
+        game->player->processMouseMovement(xpos, ypos);
+    }
 }

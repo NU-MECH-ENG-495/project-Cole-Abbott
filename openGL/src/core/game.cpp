@@ -6,6 +6,7 @@
 */
 Game::Game() {
     window = new Window(800, 600, "LearnOpenGL");
+    window->setUserPointer(this);
     player = new Player(glm::vec3(0.0f, 0.0f, 3.0f), -90, 0);
     renderer = new Renderer();
 }
