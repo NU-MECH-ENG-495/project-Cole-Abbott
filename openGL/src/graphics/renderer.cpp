@@ -3,6 +3,13 @@
 #define STB_IMAGE_IMPLEMENTATION
 #include "stb_image.h"
 
+glm::vec3 pointLightPositions[] = {
+	glm::vec3( 0.7f,  0.2f,  2.0f),
+	glm::vec3( 2.3f, -3.3f, -4.0f),
+	glm::vec3(-4.0f,  2.0f, -12.0f),
+	glm::vec3( 0.0f,  0.0f, -3.0f)
+};  
+
 // utility function for loading a 2D texture from file
 // ---------------------------------------------------
 unsigned int loadTexture(char const *path)
@@ -135,20 +142,59 @@ void Renderer::draw(Player *player, Window *window)
   lightingShader->setFloat("material.shininess", 32.0f);
 
   // directional light
-  lightingShader->setVec3("light.position", player->playerPos);
-  lightingShader->setVec3("light.direction", player->getCameraFront());
-  lightingShader->setFloat("light.cutOff", glm::cos(glm::radians(12.5f)));
-  lightingShader->setFloat("light.outerCutOff", glm::cos(glm::radians(17.5f)));
+  // lightingShader->setVec3("light.position", player->playerPos);
+  // lightingShader->setVec3("light.direction", player->getCameraFront());
+  // lightingShader->setFloat("light.cutOff", glm::cos(glm::radians(17.5f)));
+  // lightingShader->setFloat("light.outerCutOff", glm::cos(glm::radians(22.5f)));
 
-  // point light
-  lightingShader->setVec3("light.ambient", 0.2f, 0.2f, 0.2f);
-  lightingShader->setVec3("light.diffuse", 0.5f, 0.5f, 0.5f); // darken diffuse light a bit
-  lightingShader->setVec3("light.specular", 1.0f, 1.0f, 1.0f);
+  // if (player->flashLightOn)
+  //   lightingShader->setInt("light.lightOn", 1);
+  // else
+  //   lightingShader->setInt("light.lightOn", 0);
 
-  // point light attenuation
-  lightingShader->setFloat("light.constant", 1.0f);
-  lightingShader->setFloat("light.linear", 0.09f);
-  lightingShader->setFloat("light.quadratic", 0.032f);
+
+  // set dir light properties
+  lightingShader->setVec3("dirLight.direction", -0.2f, -1.0f, -0.3f);  
+  lightingShader->setVec3("dirLight.ambient", 0.2f, 0.2f, 0.2f);  
+  lightingShader->setVec3("dirLight.diffuse", 0.5f, 0.5f, 0.5f);  
+  lightingShader->setVec3("dirLight.specular", 1.0f, 1.0f, 1.0f);  
+
+
+  // set point lightproperties POINT 0
+  lightingShader->setVec3("pointLights[0].position", pointLightPositions[0]);
+  lightingShader->setVec3("pointLights[0].ambient", 0.2f, 0.2f, 0.2f);
+  lightingShader->setVec3("pointLights[0].diffuse", 0.5f, 0.5f, 0.5f); 
+  lightingShader->setVec3("pointLights[0].specular", 1.0f, 1.0f, 1.0f);
+  lightingShader->setFloat("pointLights[0].constant", 0.5f);
+  lightingShader->setFloat("pointLights[0].linear", 0.09f);
+  lightingShader->setFloat("pointLights[0].quadratic", 0.032f);
+
+  // set point lightproperties POINT 1
+  lightingShader->setVec3("pointLights[1].position", pointLightPositions[0]);
+  lightingShader->setVec3("pointLights[1].ambient", 0.2f, 0.2f, 0.2f);
+  lightingShader->setVec3("pointLights[1].diffuse", 0.5f, 0.5f, 0.5f); 
+  lightingShader->setVec3("pointLights[1].specular", 1.0f, 1.0f, 1.0f);
+  lightingShader->setFloat("pointLights[1].constant", 0.5f);
+  lightingShader->setFloat("pointLights[1].linear", 0.09f);
+  lightingShader->setFloat("pointLights[1].quadratic", 0.032f);
+
+  // set point lightproperties POINT 2
+  lightingShader->setVec3("pointLights[2].position", pointLightPositions[0]);
+  lightingShader->setVec3("pointLights[2].ambient", 0.2f, 0.2f, 0.2f);
+  lightingShader->setVec3("pointLights[2].diffuse", 0.5f, 0.5f, 0.5f); 
+  lightingShader->setVec3("pointLights[2].specular", 1.0f, 1.0f, 1.0f);
+  lightingShader->setFloat("pointLights[2].constant", 0.5f);
+  lightingShader->setFloat("pointLights[2].linear", 0.09f);
+  lightingShader->setFloat("pointLights[2].quadratic", 0.032f);
+
+  // set point lightproperties POINT 3
+  lightingShader->setVec3("pointLights[3].position", pointLightPositions[0]);
+  lightingShader->setVec3("pointLights[3].ambient", 0.2f, 0.2f, 0.2f);
+  lightingShader->setVec3("pointLights[3].diffuse", 0.5f, 0.5f, 0.5f); 
+  lightingShader->setVec3("pointLights[3].specular", 1.0f, 1.0f, 1.0f);
+  lightingShader->setFloat("pointLights[3].constant", 0.5f);
+  lightingShader->setFloat("pointLights[3].linear", 0.09f);
+  lightingShader->setFloat("pointLights[3].quadratic", 0.032f);
 
   // bind textures
   glActiveTexture(GL_TEXTURE0);

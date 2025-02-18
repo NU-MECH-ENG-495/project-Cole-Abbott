@@ -71,29 +71,7 @@ void Window::swapBuffers()
 // ---------------------------------------------------------------------------------------------------------
 void Window::processInput(Player& player)
 {
-    static float deltaTime = 0.0f; // Time between current frame and last frame
-    static float lastFrame = 0.0f; // Time of last frame
-    
-    if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
-        glfwSetWindowShouldClose(window, true);
-
-    float currentFrame = glfwGetTime();
-    deltaTime = currentFrame - lastFrame;
-    lastFrame = currentFrame;
-
-    const float cameraSpeed = 2.5 * deltaTime; // adjust accordingly
-    if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS)
-        player.processKeyboardMovement(FORWARD, deltaTime);
-    if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS)
-        player.processKeyboardMovement(BACKWARD, deltaTime);
-    if (glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS)
-        player.processKeyboardMovement(LEFT, deltaTime);
-    if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS)
-        player.processKeyboardMovement(RIGHT, deltaTime);
-    if (glfwGetKey(window, GLFW_KEY_SPACE) == GLFW_PRESS)
-        player.processKeyboardMovement(UP, deltaTime);
-    if (glfwGetKey(window, GLFW_KEY_LEFT_SHIFT) == GLFW_PRESS)
-        player.processKeyboardMovement(DOWN, deltaTime);
+    player.processInput(window);
 }
 
 bool Window::shouldClose()
