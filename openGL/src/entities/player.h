@@ -23,6 +23,11 @@ public:
         return ourCamera.cameraView();
     }
 
+    glm::vec3 getCameraFront() const
+    {
+        return ourCamera.cameraFront;
+    }
+
     void processMouseMovement(double xpos, double ypos)
     {
         ourCamera.mouseMovement(xpos, ypos);

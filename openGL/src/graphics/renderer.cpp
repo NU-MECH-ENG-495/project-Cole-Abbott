@@ -126,20 +126,29 @@ void Renderer::draw(Player *player, Window *window)
   lightPos.y = 0.0f;
   lightPos.z = cos(timeValue) - 5.0f;
 
+  // player position
   lightingShader->setVec3("viewPos", player->playerPos);
 
+  // material properties
   lightingShader->setInt("material.diffuse", 0);
   lightingShader->setInt("material.specular", 1);
   lightingShader->setFloat("material.shininess", 32.0f);
 
-  lightingShader->setVec3("light.position", lightPos);
+  // directional light
+  lightingShader->setVec3("light.position", player->playerPos);
+  lightingShader->setVec3("light.direction", player->getCameraFront());
+  lightingShader->setFloat("light.cutOff", glm::cos(glm::radians(12.5f)));
+  lightingShader->setFloat("light.outerCutOff", glm::cos(glm::radians(17.5f)));
+
+  // point light
   lightingShader->setVec3("light.ambient", 0.2f, 0.2f, 0.2f);
   lightingShader->setVec3("light.diffuse", 0.5f, 0.5f, 0.5f); // darken diffuse light a bit
   lightingShader->setVec3("light.specular", 1.0f, 1.0f, 1.0f);
 
+  // point light attenuation
   lightingShader->setFloat("light.constant", 1.0f);
-  lightingShader->setFloat("light.linear", 0.5f);
-  lightingShader->setFloat("light.quadratic", 0.1f);
+  lightingShader->setFloat("light.linear", 0.09f);
+  lightingShader->setFloat("light.quadratic", 0.032f);
 
   // bind textures
   glActiveTexture(GL_TEXTURE0);

@@ -45,6 +45,7 @@ public:
         return glm::lookAt(cameraPos, cameraPos + cameraFront, cameraUp);
     }
 
+
     void mouseMovement(double xpos, double ypos)
     {
         if (firstMouse) // initially set to true
@@ -86,7 +87,6 @@ public:
         if (direction == BACKWARD)
             // cameraPos -= cameraSpeed * cameraFront; //FLY camera
             cameraPos -= glm::normalize(glm::vec3(cameraFront.x, 0, cameraFront.z)) * cameraSpeed;
-
         if (direction == LEFT)
             cameraPos -= glm::normalize(glm::cross(cameraFront, cameraUp)) * cameraSpeed;
         if (direction == RIGHT)
