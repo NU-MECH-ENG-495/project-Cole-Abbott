@@ -52,15 +52,13 @@ void main() {
     
     // fragment properties
     vec3 norm = normalize(Normal);
-    vec3 viewDir = normalize(viewPos - fragPos);
+    vec3 viewDir = normalize(viewPos - FragPos);
 
     // directional light
     vec3 result = CalcDirLight(dirLight, norm, viewDir);
     // point lights
-    for(int i = 0; i < NR_POINT_LIGHTS; i++) 
-    {
-        result += CalcPointLight(pointLights[i], norm, fracPos, viewDir);
-    }
+    for(int i = 0; i < nr_of_point_lights; i++)
+  	        result += CalcPointLight(pointLights[i], norm, FragPos, viewDir);
 
     FragColor = vec4(result, 1.0);    
 }
