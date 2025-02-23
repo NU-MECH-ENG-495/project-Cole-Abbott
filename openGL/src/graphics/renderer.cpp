@@ -141,18 +141,6 @@ void Renderer::draw(Player *player, Window *window)
   lightingShader->setInt("material.specular", 1);
   lightingShader->setFloat("material.shininess", 32.0f);
 
-  // directional light
-  // lightingShader->setVec3("light.position", player->playerPos);
-  // lightingShader->setVec3("light.direction", player->getCameraFront());
-  // lightingShader->setFloat("light.cutOff", glm::cos(glm::radians(17.5f)));
-  // lightingShader->setFloat("light.outerCutOff", glm::cos(glm::radians(22.5f)));
-
-  // if (player->flashLightOn)
-  //   lightingShader->setInt("light.lightOn", 1);
-  // else
-  //   lightingShader->setInt("light.lightOn", 0);
-
-
   // set dir light properties
   lightingShader->setVec3("dirLight.direction", -0.2f, -1.0f, -0.3f);  
   lightingShader->setVec3("dirLight.ambient", 0.2f, 0.2f, 0.2f);  
