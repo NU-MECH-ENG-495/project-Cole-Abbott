@@ -36,7 +36,7 @@ struct PointLight {
     vec3 diffuse;
     vec3 specular;
 };
-#define NR_POINT_LIGHTS
+#define NR_POINT_LIGHTS 4
 uniform PointLight pointLights[NR_POINT_LIGHTS]; //uniform array of point lights
   
 
@@ -57,7 +57,7 @@ void main() {
     // directional light
     vec3 result = CalcDirLight(dirLight, norm, viewDir);
     // point lights
-    for(int i = 0; i < nr_of_point_lights; i++)
+    for(int i = 0; i < NR_POINT_LIGHTS; i++)
   	        result += CalcPointLight(pointLights[i], norm, FragPos, viewDir);
 
     FragColor = vec4(result, 1.0);    
@@ -71,7 +71,7 @@ vec3 CalcDirLight(DirLight light, vec3 normal, vec3 viewDir)
     //diffuse 
     float diff = max(dot(normal, lightDir), 0.0);
     //specular
-    vec3 reflectDir = reflect(-lightDir, norm);
+    vec3 reflectDir = reflect(-lightDir, normal);
     float spec = pow(max(dot(viewDir, reflectDir), 0.0), material.shininess);
 
     //combine results
@@ -91,7 +91,7 @@ vec3 CalcPointLight(PointLight light, vec3 normal, vec3 fragPos, vec3 viewDir)
     // diffuse shading 
     float diff = max(dot(normal, lightDir), 0.0);
     //specular
-    vec3 reflectDir = reflect(-lightDir, norm);
+    vec3 reflectDir = reflect(-lightDir, normal);
     float spec = pow(max(dot(viewDir, reflectDir), 0.0), material.shininess);
 
     //attenuation

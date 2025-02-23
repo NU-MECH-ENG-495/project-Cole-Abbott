@@ -170,7 +170,7 @@ void Renderer::draw(Player *player, Window *window)
   lightingShader->setFloat("pointLights[0].quadratic", 0.032f);
 
   // set point lightproperties POINT 1
-  lightingShader->setVec3("pointLights[1].position", pointLightPositions[0]);
+  lightingShader->setVec3("pointLights[1].position", pointLightPositions[1]);
   lightingShader->setVec3("pointLights[1].ambient", 0.2f, 0.2f, 0.2f);
   lightingShader->setVec3("pointLights[1].diffuse", 0.5f, 0.5f, 0.5f); 
   lightingShader->setVec3("pointLights[1].specular", 1.0f, 1.0f, 1.0f);
@@ -179,7 +179,7 @@ void Renderer::draw(Player *player, Window *window)
   lightingShader->setFloat("pointLights[1].quadratic", 0.032f);
 
   // set point lightproperties POINT 2
-  lightingShader->setVec3("pointLights[2].position", pointLightPositions[0]);
+  lightingShader->setVec3("pointLights[2].position", pointLightPositions[2]);
   lightingShader->setVec3("pointLights[2].ambient", 0.2f, 0.2f, 0.2f);
   lightingShader->setVec3("pointLights[2].diffuse", 0.5f, 0.5f, 0.5f); 
   lightingShader->setVec3("pointLights[2].specular", 1.0f, 1.0f, 1.0f);
@@ -188,7 +188,7 @@ void Renderer::draw(Player *player, Window *window)
   lightingShader->setFloat("pointLights[2].quadratic", 0.032f);
 
   // set point lightproperties POINT 3
-  lightingShader->setVec3("pointLights[3].position", pointLightPositions[0]);
+  lightingShader->setVec3("pointLights[3].position", pointLightPositions[3]);
   lightingShader->setVec3("pointLights[3].ambient", 0.2f, 0.2f, 0.2f);
   lightingShader->setVec3("pointLights[3].diffuse", 0.5f, 0.5f, 0.5f); 
   lightingShader->setVec3("pointLights[3].specular", 1.0f, 1.0f, 1.0f);
@@ -215,18 +215,21 @@ void Renderer::draw(Player *player, Window *window)
     glDrawArrays(GL_TRIANGLES, 0, 36);
   }
 
-  // draw the light cube
-  lightCubeShader->use();
-  model = glm::mat4(1.0f);
-  model = glm::translate(model, lightPos);
-  model = glm::scale(model, glm::vec3(0.2f));
 
-  // lightingShader.setMat4("model", model);
-  lightCubeShader->setMat4("model", model);
-  lightCubeShader->setMat4("view", view);
-  lightCubeShader->setMat4("projection", projection);
-  glDrawArrays(GL_TRIANGLES, 0, 36);
+  // draw the light cubes
+  for (unsigned int i = 0; i < 4; i++)
+  {
+    lightCubeShader->use();
+    model = glm::mat4(1.0f);
+    model = glm::translate(model, pointLightPositions[i]);
+    model = glm::scale(model, glm::vec3(0.2f));
 
+    // lightingShader.setMat4("model", model);
+    lightCubeShader->setMat4("model", model);
+    lightCubeShader->setMat4("view", view);
+    lightCubeShader->setMat4("projection", projection);
+    glDrawArrays(GL_TRIANGLES, 0, 36);
+  }
   glBindVertexArray(0);
 
   glfwPollEvents();
