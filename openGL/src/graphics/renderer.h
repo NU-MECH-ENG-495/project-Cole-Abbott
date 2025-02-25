@@ -17,6 +17,7 @@
 #include "vertices.h"
 #include "entities/player.h"
 #include "core/window.h"
+#include "world/world.h"
 
 
 class Renderer {
@@ -24,14 +25,13 @@ public:
     Renderer();
     ~Renderer();
     void clear();
-    void draw(Player *player, Window *window);
+    void draw(Player *player, Window *window, World *world);
 
 private:
     unsigned int diffuseMap;
     unsigned int specularMap;
     unsigned int VBO, VAO;
-    Shader* lightingShader;
-    Shader* lightCubeShader;
+    Shader* blockShader;
 };
 
 #endif

@@ -6,6 +6,7 @@
 #include "window.h"
 #include "entities/player.h"
 #include "graphics/renderer.h"
+#include "world/world.h"
 
 class Game {
 public:
@@ -16,10 +17,11 @@ public:
 
 private:
     void update();
-    void render();
+    void render(World* world);
 
     Window* window;
     Renderer* renderer;
+    World* world;
 };
 
 #endif

@@ -9,6 +9,7 @@ Game::Game() {
     window->setUserPointer(this);
     player = new Player(glm::vec3(0.0f, 0.0f, 3.0f), -90, 0);
     renderer = new Renderer();
+    world = new World();
 }
 
 /** 
@@ -27,7 +28,7 @@ void Game::run() {
     while (!window->shouldClose()) {
         window->processInput(*player);
         update();
-        render();
+        render(world);
         window->swapBuffers();
     }
 }
@@ -43,7 +44,7 @@ void Game::update() {
 /** 
  @brief Renders the scene by clearing the renderer and drawing the player.
 */
-void Game::render() {
+void Game::render(World *world) {
     renderer->clear();
-    renderer->draw(player, window);
+    renderer->draw(player, window, world);
 }
