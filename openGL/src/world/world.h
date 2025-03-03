@@ -4,6 +4,9 @@
 #include <vector>
 #include "chunk.h"
 #include "graphics/shader.h"
+#include "blockTypes.h"
+
+
 
 class World {
 public:
@@ -11,6 +14,8 @@ public:
     ~World();
 
     void render(Shader* shader);
+    BlockType getBlock(int x, int y, int z) const;
+    void setBlock(int x, int y, int z, BlockType type);
 
 private:
     std::vector<Chunk*> chunks;

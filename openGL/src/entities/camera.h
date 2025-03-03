@@ -19,8 +19,7 @@ enum Camera_Movement
     BACKWARD,
     LEFT,
     RIGHT,
-    UP,
-    DOWN
+    JUMP
 };
 
 class Camera
@@ -78,23 +77,10 @@ public:
         cameraFront = glm::normalize(direction);
     }
 
-    void keyboardMovement(Camera_Movement direction, float deltaTime)
+
+    void setCameraPos(glm::vec3 _cameraPos)
     {
-        const float cameraSpeed = 2.5 * deltaTime; // adjust accordingly
-        if (direction == FORWARD)
-            // cameraPos += cameraSpeed * cameraFront; //FLY camera
-            cameraPos += glm::normalize(glm::vec3(cameraFront.x, 0, cameraFront.z)) * cameraSpeed;
-        if (direction == BACKWARD)
-            // cameraPos -= cameraSpeed * cameraFront; //FLY camera
-            cameraPos -= glm::normalize(glm::vec3(cameraFront.x, 0, cameraFront.z)) * cameraSpeed;
-        if (direction == LEFT)
-            cameraPos -= glm::normalize(glm::cross(cameraFront, cameraUp)) * cameraSpeed;
-        if (direction == RIGHT)
-            cameraPos += glm::normalize(glm::cross(cameraFront, cameraUp)) * cameraSpeed;
-        if (direction == UP)
-            cameraPos += cameraSpeed * cameraUp;
-        if (direction == DOWN)
-            cameraPos -= cameraSpeed * cameraUp;
+        cameraPos = _cameraPos;
     }
 };
 

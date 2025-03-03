@@ -21,3 +21,17 @@ void World::render(Shader* shader) {
         chunk->render(shader);
     }
 }
+
+//
+BlockType World::getBlock(int x, int y, int z) const {
+    // Find the chunk that contains the block
+    int chunkX = x / Chunk::CHUNK_SIZE;
+    int chunkZ = z / Chunk::CHUNK_SIZE;
+    
+    for (Chunk* chunk : chunks) {
+        if (chunk->getX() == chunkX && chunk->getZ() == chunkZ) {
+            return chunk->getBlock(x % Chunk::CHUNK_SIZE, y, z % Chunk::CHUNK_SIZE);
+        }
+    }
+    return AIR;
+}

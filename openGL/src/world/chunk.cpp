@@ -1,5 +1,6 @@
 #include "chunk.h"
 
+
 glm::vec3 cubeVertices[6] = {
     // positions
     glm::vec3(-0.5f, -0.5f, -0.5f),
@@ -22,25 +23,25 @@ Chunk::Chunk(int x, int y, int z) : x(x), y(y), z(z)
     // Initialize blocks with some data (e.g., all blocks are solid)
     for (int i = 0; i < CHUNK_SIZE; ++i)
     {
-        for (int j = 0; j < CHUNK_SIZE; ++j)
+        for (int j = 0; j < CHUNK_HEIGHT; ++j)
         {
             for (int k = 0; k < CHUNK_SIZE; ++k)
             {
-                blocks[i][j][k] = 1; // Example: all blocks are solid
+                if (j <= 10)
+                {
+                    blocks[i][j][k] = DIRT;
+                }
+                else
+                {
+                    blocks[i][j][k] = AIR;
+                }
             }
         }
     }
 
     generateMesh();
 
-    // // output the vertices
-    // std::cout << "Chunk: " << x << ", " << y << ", " << z << std::endl;
-    // for (int i = 0; i < vertices.size(); i += 6)
-    // {
-    //     std::cout << "Vert: " << vertices[i] << ", " << vertices[i + 1] << ", " << vertices[i + 2] << std::endl;
-    //     // std::cout << " Norm: " <<vertices[i + 3] << ", " << vertices[i + 4] << ", " << vertices[i + 5] << std::endl;
-    // }
-    // std::cout << "size of vertices: " << vertices.size() << std::endl;
+
 }
 
 Chunk::~Chunk()
@@ -166,5 +167,5 @@ bool Chunk::isBlockSolid(int x, int y, int z)
         return false;
     }
 
-    return blocks[x][y][z] == 1;
+    return blocks[x][y][z] != AIR;
 }

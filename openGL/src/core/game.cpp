@@ -7,7 +7,7 @@
 Game::Game() {
     window = new Window(800, 600, "LearnOpenGL");
     window->setUserPointer(this);
-    player = new Player(glm::vec3(0.0f, 0.0f, 3.0f), -90, 0);
+    player = new Player(glm::vec3(0.0f, 25.0f, 3.0f), -90, 0);
     renderer = new Renderer();
     world = new World();
 }
@@ -38,7 +38,7 @@ void Game::run() {
  @brief Updates the game state by calling the player's update method.
 */
 void Game::update() {
-    player->update();
+    player->update(world);
 }
 
 /** 
