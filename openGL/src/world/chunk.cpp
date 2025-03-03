@@ -18,6 +18,13 @@ glm::vec2 texCoords[4] = {
     glm::vec2(0.0f, 1.0f),
 };
 
+/**
+ * @brief Construct a new Chunk:: Chunk object
+ * 
+ * @param x x coordinate of the chunk
+ * @param y y coordinate of the chunk
+ * @param z z coordinate of the chunk
+ */
 Chunk::Chunk(int x, int y, int z) : x(x), y(y), z(z)
 {
     // Initialize blocks with some data (e.g., all blocks are solid)
@@ -44,14 +51,20 @@ Chunk::Chunk(int x, int y, int z) : x(x), y(y), z(z)
 
 }
 
+/**
+ * @brief Destroy the Chunk:: Chunk object
+ * 
+ */
 Chunk::~Chunk()
 {
     glDeleteVertexArrays(1, &VAO);
     glDeleteBuffers(1, &VBO);
 }
 
-// generates a mesh with all the faces of the blocks in the chunk
-// todo optimize this function to only generate faces for blocks that are exposed to air
+/**
+ * @brief Generates the mesh for the chunk
+ * 
+ */
 void Chunk::generateMesh()
 {
     vertices.clear();
@@ -100,6 +113,11 @@ void Chunk::generateMesh()
     glBindVertexArray(0);
 }
 
+/**
+ * @brief Renders the chunk
+ * 
+ * @param shader shader to use for rendering
+ */
 void Chunk::render(Shader* shader)
 {
     glm::mat4 model = glm::mat4(1.0f);
@@ -111,11 +129,23 @@ void Chunk::render(Shader* shader)
     glBindVertexArray(0);
 }
 
+
+/**
+ * @brief Adds a face to the chunk mesh
+ * 
+ * @param vertices Vector of vertices, this will be pushed to the VBO
+ * @param indices Vector of indices, this will be pushed to the EBO
+ * @param position position of the block in the chunk
+ * @param normal normal vector to the face
+ * @param texCoords textrure coordinates of the face
+ * @param indexCount used to keep track of the index of the next vertex
+ */
 void Chunk::addFace(std::vector<Vertex>& vertices, std::vector<uint32_t>& indices, 
     glm::vec3 position, glm::vec3 normal, glm::vec2 texCoords[4], int& indexCount) {
 // Compute right and up vectors based on normal direction
 glm::vec3 right, up;
 
+// Determine right and up vectors based on normal direction
 if (normal == glm::vec3(0, 0, 1)) {        // Front face
 right = glm::vec3(1, 0, 0);
 up = glm::vec3(0, 1, 0);
@@ -128,7 +158,7 @@ up = glm::vec3(0, 1, 0);
 } else if (normal == glm::vec3(-1, 0, 0)) { // Left face
 right = glm::vec3(0, 0, 1);
 up = glm::vec3(0, 1, 0);
-} else if (normal == glm::vec3(0, 1, 0)) {  // Top face {x, y + 1, z}
+} else if (normal == glm::vec3(0, 1, 0)) {  // Top face 
 right = glm::vec3(1, 0, 0);
 up = glm::vec3(0, 0, 1);
 } else if (normal == glm::vec3(0, -1, 0)) { // Bottom face
@@ -142,12 +172,13 @@ Vertex v1 = {position + right, normal, texCoords[1]};
 Vertex v2 = {position + right + up, normal, texCoords[2]};
 Vertex v3 = {position + up, normal, texCoords[3]};
 
+// push vertices to the vector
 vertices.push_back(v0);
 vertices.push_back(v1);
 vertices.push_back(v2);
 vertices.push_back(v3);
 
-// Define indices
+// push indices to the vector
 indices.push_back(indexCount);
 indices.push_back(indexCount + 1);
 indices.push_back(indexCount + 2);
@@ -159,7 +190,14 @@ indexCount += 4;  // Move to next vertex index
 }
 
 
-
+/**
+ * @brief checks if a block is solid
+ * 
+ * @param x x coordinate of the block in the chunk
+ * @param y y coordinate of the block in the chunk
+ * @param z z coordinate of the block in the chunk
+ * @return true if the block is solid, false if the block is an air block
+ */
 bool Chunk::isBlockSolid(int x, int y, int z)
 {
     if (x < 0 || x >= CHUNK_SIZE || y < 0 || y >= CHUNK_HEIGHT || z < 0 || z >= CHUNK_SIZE)

@@ -15,7 +15,11 @@ void Player::processMouseMovement(double xpos, double ypos)
     ourCamera.mouseMovement(xpos, ypos);
 }
 
-
+/**
+ * @brief Processes input from the keyboard and updates the player's velocity
+ * 
+ * @param window 
+ */
 void Player::processInput(GLFWwindow *window)
 {
     const float moveSpeed = 5.0f; // Movement speed
@@ -44,6 +48,11 @@ void Player::processInput(GLFWwindow *window)
         glfwSetWindowShouldClose(window, true);
 }
 
+/**
+ * @brief Updates the player's position based on the velocity and collision detection
+ * 
+ * @param world 
+ */
 void Player::update(World *world)
 {
 
@@ -82,6 +91,14 @@ float Player::getDeltaTime()
     return deltaTime;
 }
 
+/**
+ * @brief Checks if the player is colliding with any blocks in the world
+ * 
+ * @param newPos New position of the player
+ * @param size Size of the player
+ * @param world Pointer to the world object
+ * @return true if the player is colliding with any blocks, false otherwise
+ */
 bool Player::isColliding(glm::vec3 newPos, glm::vec3 size, const World *world)
 {
     int minX = floor(newPos.x - size.x / 2);
