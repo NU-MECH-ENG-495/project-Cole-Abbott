@@ -1,4 +1,5 @@
 #include "chunk.h"
+#include "terrainGeneration.h"
 
 
 glm::vec3 cubeVertices[6] = {
@@ -11,11 +12,23 @@ glm::vec3 cubeVertices[6] = {
     glm::vec3(-0.5f, -0.5f, -0.5f),
 };
 
-glm::vec2 texCoords[4] = {
+// glm::vec2 topTexCoords[4] = {
+//     glm::vec2(0.0f, 0.0f),
+//     glm::vec2(1.0f, 0.0f),
+//     glm::vec2(1.0f, 1.0f),
+//     glm::vec2(0.0f, 1.0f),
+// };
+glm::vec2 topTexCoords[4] = {
     glm::vec2(0.0f, 0.0f),
-    glm::vec2(1.0f, 0.0f),
-    glm::vec2(1.0f, 1.0f),
+    glm::vec2(0.5f, 0.0f),
+    glm::vec2(0.5f, 1.0f),
     glm::vec2(0.0f, 1.0f),
+};
+glm::vec2 sideTexCoords[4] = {
+    glm::vec2(0.5f, 1.0f),
+    glm::vec2(1.0f, 1.0f),
+    glm::vec2(1.0f, 0.0f),
+    glm::vec2(0.5f, 0.0f),
 };
 
 /**
@@ -28,13 +41,16 @@ glm::vec2 texCoords[4] = {
 Chunk::Chunk(int x, int y, int z) : x(x), y(y), z(z)
 {
     // Initialize blocks with some data (e.g., all blocks are solid)
-    for (int i = 0; i < CHUNK_SIZE; ++i)
+    for (int i = 0; i < CHUNK_SIZE; ++i) // x
     {
-        for (int j = 0; j < CHUNK_HEIGHT; ++j)
+        for (int k = 0; k < CHUNK_SIZE; ++k) // z
         {
-            for (int k = 0; k < CHUNK_SIZE; ++k)
+            //calculate height with perlin noise
+            double height = PerlinNoise2((x * CHUNK_SIZE + i), (z * CHUNK_SIZE + k)) * 40 + 64; // scaled to 0-20
+            
+            for (int j = 0; j < CHUNK_HEIGHT; ++j) // z
             {
-                if (j <= 10)
+                if (j <= height)
                 {
                     blocks[i][j][k] = DIRT;
                 }
@@ -47,8 +63,6 @@ Chunk::Chunk(int x, int y, int z) : x(x), y(y), z(z)
     }
 
     generateMesh();
-
-
 }
 
 /**
@@ -76,12 +90,12 @@ void Chunk::generateMesh()
             for (int z = 0; z < CHUNK_SIZE; z++) {
                 if (!isBlockSolid(x, y, z)) continue;
     
-                if (!isBlockSolid(x, y, z - 1)) addFace(vertices, indices, {x, y, z}, {0, 0, -1}, texCoords, indexCount); // Front
-                if (!isBlockSolid(x, y, z + 1)) addFace(vertices, indices, {x, y, z + 1}, {0, 0, 1}, texCoords, indexCount); // Back
-                if (!isBlockSolid(x - 1, y, z)) addFace(vertices, indices, {x, y, z}, {-1, 0, 0}, texCoords, indexCount); // Left
-                if (!isBlockSolid(x + 1, y, z)) addFace(vertices, indices, {x + 1, y, z}, {1, 0, 0}, texCoords, indexCount); // Right
-                if (!isBlockSolid(x, y - 1, z)) addFace(vertices, indices, {x, y, z}, {0, -1, 0}, texCoords, indexCount); // Bottom
-                if (!isBlockSolid(x, y + 1, z)) addFace(vertices, indices, {x, y + 1, z}, {0, 1, 0}, texCoords, indexCount); // Top
+                if (!isBlockSolid(x, y, z - 1)) addFace(vertices, indices, {x, y, z}, {0, 0, -1}, sideTexCoords, indexCount); // Front
+                if (!isBlockSolid(x, y, z + 1)) addFace(vertices, indices, {x, y, z + 1}, {0, 0, 1}, sideTexCoords, indexCount); // Back
+                if (!isBlockSolid(x - 1, y, z)) addFace(vertices, indices, {x, y, z}, {-1, 0, 0}, sideTexCoords, indexCount); // Left
+                if (!isBlockSolid(x + 1, y, z)) addFace(vertices, indices, {x + 1, y, z}, {1, 0, 0}, sideTexCoords, indexCount); // Right
+                if (!isBlockSolid(x, y - 1, z)) addFace(vertices, indices, {x, y, z}, {0, -1, 0}, topTexCoords, indexCount); // Bottom
+                if (!isBlockSolid(x, y + 1, z)) addFace(vertices, indices, {x, y + 1, z}, {0, 1, 0}, topTexCoords, indexCount); // Top
 
             } 
         }

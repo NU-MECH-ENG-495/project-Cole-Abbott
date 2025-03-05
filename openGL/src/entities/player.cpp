@@ -1,4 +1,5 @@
 #include "player.h"
+#include "world/terrainGeneration.h"
 
 Player::Player(glm::vec3 _playerPos, float _yaw, float _pitch)
     : position(_playerPos), yaw(_yaw), pitch(_pitch), ourCamera(_playerPos, _yaw, _pitch)
@@ -22,7 +23,7 @@ void Player::processMouseMovement(double xpos, double ypos)
  */
 void Player::processInput(GLFWwindow *window)
 {
-    const float moveSpeed = 5.0f; // Movement speed
+    const float moveSpeed = 7.0f; // Movement speed
     glm::vec3 movement(0.0f, 0.0f, 0.0f);
 
     if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS)
@@ -35,10 +36,11 @@ void Player::processInput(GLFWwindow *window)
         movement += getRightVector();
     if (glfwGetKey(window, GLFW_KEY_SPACE) && canJump)
     {
-        velocity.y = 5.0f; // Jump velocity
+        velocity.y = 7.0f; // Jump velocity
     }
 
-    // movement = glm::normalize(movement) * moveSpeed;
+    if (movement != glm::vec3(0.0f))
+        movement = glm::normalize(movement);
 
     // Set velocity (X & Z only, Y is handled by gravity)
     velocity.x = movement.x * moveSpeed;
@@ -59,14 +61,15 @@ void Player::update(World *world)
     float deltaTime = getDeltaTime();
 
     // Apply gravity
-    velocity.y -= 15.0f * deltaTime;
+    velocity.y -= 17.0f * deltaTime;
 
     // Predict new position
     glm::vec3 newPos = position + velocity * deltaTime;
 
     // Check collision for each axis separately
-    if (!isColliding(glm::vec3(newPos.x, position.y, position.z), size, world))
+    if (!isColliding(glm::vec3(newPos.x, position.y, position.z), size, world)){
         position.x = newPos.x;
+    }
     if (!isColliding(glm::vec3(position.x, newPos.y, position.z), size, world))
     {
         position.y = newPos.y; // Move player down
@@ -77,10 +80,14 @@ void Player::update(World *world)
         velocity.y = 0; // Stop falling when hitting the ground
         canJump = true; // Allow player to jump
     }
-    if (!isColliding(glm::vec3(position.x, position.y, newPos.z), size, world))
+    if (!isColliding(glm::vec3(position.x, position.y, newPos.z), size, world)) {
         position.z = newPos.z;
-
+    }
     ourCamera.setCameraPos(position);
+    std::cout << "Player position: " << position.x << ", " << position.y << ", " << position.z;
+    int yTerrain = PerlinNoise2(position.x, position.z) * 10 + 10;
+    std::cout << " Terrain height: " << yTerrain << std::endl;
+
 }
 
 float Player::getDeltaTime()
@@ -126,10 +133,12 @@ bool Player::isColliding(glm::vec3 newPos, glm::vec3 size, const World *world)
 
 glm::vec3 Player::getForwardVector()
 {
-    return ourCamera.cameraFront;
+    glm::vec3 front = ourCamera.cameraFront;
+    front.y = 0;
+    return glm::normalize(front);
 }
 
 glm::vec3 Player::getRightVector()
 {
-    return glm::normalize(glm::cross(ourCamera.cameraFront, ourCamera.cameraUp));
+    return glm::normalize(glm::cross(getForwardVector(), ourCamera.cameraUp));
 }

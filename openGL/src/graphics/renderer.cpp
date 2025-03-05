@@ -30,7 +30,7 @@ unsigned int loadTexture(char const *path)
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
 
     stbi_image_free(data);
   }
@@ -52,8 +52,8 @@ Renderer::
   blockShader = new Shader("shaders/blockVertexShader.glsl", "shaders/blockFragShader.glsl");
 
   // load textures
-  diffuseMap = loadTexture("textures/container2.png");
-  specularMap = loadTexture("textures/container2_specular.png");
+  grassTexture = loadTexture("textures/GRASS.png");
+  grassSide = loadTexture("textures/GRASS_SIDE.png");
 
 
 }
@@ -72,7 +72,7 @@ Renderer::~Renderer()
 void Renderer::clear()
 {
   // clear the colorbuffer
-  glClearColor(0.1f, 0.1f, 0.1f, 1.0f);
+  glClearColor(0.64f, 0.82f, 1.0f, 1.0f);
   glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 }
 
@@ -100,9 +100,9 @@ void Renderer::draw(Player *player, Window *window, World *world)
 
   // bind textures
   glActiveTexture(GL_TEXTURE0);
-  glBindTexture(GL_TEXTURE_2D, diffuseMap);
+  glBindTexture(GL_TEXTURE_2D, grassTexture);
   glActiveTexture(GL_TEXTURE1);
-  glBindTexture(GL_TEXTURE_2D, specularMap);
+  glBindTexture(GL_TEXTURE_2D, grassSide);
 
   world->render(blockShader);
 

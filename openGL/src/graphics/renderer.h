@@ -28,8 +28,8 @@ public:
     void draw(Player *player, Window *window, World *world);
 
 private:
-    unsigned int diffuseMap;
-    unsigned int specularMap;
+    unsigned int grassTexture;
+    unsigned int grassSide;
     unsigned int VBO, VAO;
     Shader* blockShader;
 };
