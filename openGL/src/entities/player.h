@@ -6,7 +6,8 @@
 #include <glm/gtc/type_ptr.hpp>
 
 #include "camera.h"
-#include "world/world.h"
+// #include "world/world.h"
+class World;
 
 class Player
 {
@@ -14,6 +15,8 @@ public:
     glm::vec3 position;
     glm::vec3 velocity;  // Movement velocity
     glm::vec3 size = glm::vec3(0.6f, 1.8f, 0.6f); // Approximate player size
+
+    const int renderDistance = 6;
 
 
     float yaw, pitch;
@@ -24,14 +27,15 @@ public:
     void processMouseMovement(double xpos, double ypos);
 
     void processInput(GLFWwindow* window);
-    void update(World *world);
+    void update(std::shared_ptr<World> world);
 
 private:
     float lastFrame = 0.0f;
     Camera ourCamera;
     bool canJump = true;
+    bool canFly = true;
     float getDeltaTime();
-    bool isColliding(glm::vec3 newPos, glm::vec3 size, const World *world);
+    bool isColliding(glm::vec3 newPos, glm::vec3 size, const std::shared_ptr<World> world);
     glm::vec3 getForwardVector();
     glm::vec3 getRightVector();
 };

@@ -156,21 +156,33 @@ double PerlinNoise2(double x, double y){
 
 //     int totalPoints = 100;
 
-//     std::vector<double> x,y,noise;
+//     std::vector<double> x,y,xnoise, noise;
 
-//     // for (int i = 0; i < totalPoints; i++)
+//     //generate random points and interpolate between them
+//     // for (int i = 0; i < 10; i++)
 //     // {
-//     //     for (int j = 0; j < totalPoints; j++)
-//     //     {
-//     //         x.push_back(i);
-//     //         y.push_back(j);
-//     //         noise.push_back(PerlinNoise2(i, j));
-//     //     }
+//     //     x.push_back(i);
+//     //     y.push_back(Noise1(i));
+//     // }
+//     // for (int i = 0; i < 100; i++)
+//     // {
+//     //     xnoise.push_back(i / 10.0);
+//     //     noise.push_back(Interpolate1(Noise1(i/10), Noise1(i/10 + 1), i/10.0 - floor(i/10.0)));
 //     // }
 
-//     // writeToFile(x, y, noise, "perlin.csv");
+//     // // for (int i = 0; i < totalPoints; i++)
+//     // // {
+//     // //     for (int j = 0; j < totalPoints; j++)
+//     // //     {
+//     // //         x.push_back(i);
+//     // //         y.push_back(j);
+//     // //         noise.push_back(PerlinNoise2(i, j));
+//     // //     }
+//     // // }
 
-//     for (int i = -20; i < 30; i++)
+//     // // writeToFile(x, y, noise, "perlin.csv");
+
+//     for (int i = -100; i < 100; i++)
 //     {
 //         x.push_back(i);
 //         y.push_back(PerlinNoise2(28 , i));
@@ -178,6 +190,9 @@ double PerlinNoise2(double x, double y){
 //     }
 
 //     writeToFile(x, y, "perlin1D.csv");
+
+//     // writeToFile(x, y, "noiseDemo.csv");
+//     // writeToFile(xnoise, noise, "interpolateDemo.csv");
 
 //     return 0;
 // }

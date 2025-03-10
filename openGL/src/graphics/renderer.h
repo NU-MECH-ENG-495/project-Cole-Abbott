@@ -25,11 +25,11 @@ public:
     Renderer();
     ~Renderer();
     void clear();
-    void draw(Player *player, Window *window, World *world);
+    void draw(std::shared_ptr<Player> player, std::shared_ptr<Window> window, std::shared_ptr<World> world);
 
 private:
-    unsigned int grassTexture;
-    unsigned int grassSide;
+    unsigned int atlas;
+
     unsigned int VBO, VAO;
     Shader* blockShader;
 };

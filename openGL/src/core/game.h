@@ -7,21 +7,25 @@
 #include "entities/player.h"
 #include "graphics/renderer.h"
 #include "world/world.h"
+#include <memory>
 
 class Game {
 public:
     Game();
     ~Game();
     void run();
-    Player* player;
+    std::shared_ptr<Player> player;
 
 private:
     void update();
-    void render(World* world);
+    void render();
 
-    Window* window;
-    Renderer* renderer;
-    World* world;
+
+    std::shared_ptr<Window> window;
+    std::shared_ptr<Renderer> renderer;
+    std::shared_ptr<World> world;
+
+
 };
 
 #endif

@@ -5,20 +5,19 @@
  @brief Constructor for Game class. Initializes window and player.
 */
 Game::Game() {
-    window = new Window(800, 600, "LearnOpenGL");
+    window = std::make_shared<Window>(800, 600, "LearnOpenGL");
     window->setUserPointer(this);
-    player = new Player(glm::vec3(0.0f, 100.0f, 3.0f), -90, 0);
-    renderer = new Renderer();
-    world = new World();
+    player = std::make_shared<Player>(glm::vec3(0.0f, 100.0f, 3.0f), -90, 0);
+    renderer = std::make_shared<Renderer>();
+    world = std::make_shared<World>();
+    
 }
 
 /** 
  @brief Destructor for Game class. Cleans up resources.
 */
 Game::~Game() {
-    delete window;
-    delete player;
-    delete renderer;
+    // all pointers are shared pointers, so no need to delete them
 }
 
 /** 
@@ -28,7 +27,7 @@ void Game::run() {
     while (!window->shouldClose()) {
         window->processInput(*player);
         update();
-        render(world);
+        render();
         window->swapBuffers();
     }
 }
@@ -44,7 +43,7 @@ void Game::update() {
 /** 
  @brief Renders the scene by clearing the renderer and drawing the player.
 */
-void Game::render(World *world) {
+void Game::render() {
     renderer->clear();
     renderer->draw(player, window, world);
 }

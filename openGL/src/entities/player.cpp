@@ -1,5 +1,7 @@
 #include "player.h"
 #include "world/terrainGeneration.h"
+#include "world/world.h"
+
 
 Player::Player(glm::vec3 _playerPos, float _yaw, float _pitch)
     : position(_playerPos), yaw(_yaw), pitch(_pitch), ourCamera(_playerPos, _yaw, _pitch)
@@ -23,7 +25,7 @@ void Player::processMouseMovement(double xpos, double ypos)
  */
 void Player::processInput(GLFWwindow *window)
 {
-    const float moveSpeed = 7.0f; // Movement speed
+    float moveSpeed = 7.0f; // Movement speed
     glm::vec3 movement(0.0f, 0.0f, 0.0f);
 
     if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS)
@@ -34,20 +36,40 @@ void Player::processInput(GLFWwindow *window)
         movement -= getRightVector();
     if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS)
         movement += getRightVector();
-    if (glfwGetKey(window, GLFW_KEY_SPACE) && canJump)
+    if (glfwGetKey(window, GLFW_KEY_SPACE)) // jump / fly up
     {
-        velocity.y = 7.0f; // Jump velocity
+        if (canFly)
+            movement.y = 1.0f; // Fly up
+        else if (canJump)
+            velocity.y = 7.0f; // Jump velocity
     }
+    if (glfwGetKey(window, GLFW_KEY_LEFT_CONTROL) == GLFW_PRESS) // crouch / fly down
+    {
+        if (canFly)
+            movement.y = -1.0f; // Fly down
+    }
+    if (glfwGetKey(window, GLFW_KEY_LEFT_SHIFT) == GLFW_PRESS) // sprint
+    {
+        moveSpeed = canFly ? 40.0f : 12.0f; //move faster if flying
+    }
+    
 
     if (movement != glm::vec3(0.0f))
         movement = glm::normalize(movement);
 
-    // Set velocity (X & Z only, Y is handled by gravity)
+    // Set velocity 
     velocity.x = movement.x * moveSpeed;
     velocity.z = movement.z * moveSpeed;
+    if (canFly)
+    velocity.y = movement.y * moveSpeed;
 
     if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
         glfwSetWindowShouldClose(window, true);
+    if (glfwGetKey(window, GLFW_KEY_E) == GLFW_PRESS){
+        //relsease the mouse
+        glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
+    }
+        
 }
 
 /**
@@ -55,13 +77,15 @@ void Player::processInput(GLFWwindow *window)
  * 
  * @param world 
  */
-void Player::update(World *world)
+void Player::update(std::shared_ptr<World> world)
 {
 
     float deltaTime = getDeltaTime();
 
     // Apply gravity
-    velocity.y -= 17.0f * deltaTime;
+    if(!canFly){
+        velocity.y -= 17.0f * deltaTime;
+    }
 
     // Predict new position
     glm::vec3 newPos = position + velocity * deltaTime;
@@ -106,7 +130,7 @@ float Player::getDeltaTime()
  * @param world Pointer to the world object
  * @return true if the player is colliding with any blocks, false otherwise
  */
-bool Player::isColliding(glm::vec3 newPos, glm::vec3 size, const World *world)
+bool Player::isColliding(glm::vec3 newPos, glm::vec3 size, const std::shared_ptr<World> world)
 {
     int minX = floor(newPos.x - size.x / 2);
     int maxX = floor(newPos.x + size.x / 2);

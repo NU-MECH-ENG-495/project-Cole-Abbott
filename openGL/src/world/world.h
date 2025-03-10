@@ -5,6 +5,7 @@
 #include "chunk.h"
 #include "graphics/shader.h"
 #include "blockTypes.h"
+#include "entities/player.h"
 
 
 
@@ -13,12 +14,12 @@ public:
     World();
     ~World();
 
-    void render(Shader* shader);
+    void render(Shader* shader, std::shared_ptr<Player> player);
     BlockType getBlock(int x, int y, int z) const;
     void setBlock(int x, int y, int z, BlockType type);
 
 private:
-    std::vector<Chunk*> chunks;
+    std::vector<std::shared_ptr<Chunk>> chunks;
 };
 
 #endif // WORLD_H

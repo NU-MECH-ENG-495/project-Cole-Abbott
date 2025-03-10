@@ -30,6 +30,7 @@ unsigned int loadTexture(char const *path)
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
+    // glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST); // was messing with to fix not rendering at long distances but didn't work
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
 
     stbi_image_free(data);
@@ -52,8 +53,7 @@ Renderer::
   blockShader = new Shader("shaders/blockVertexShader.glsl", "shaders/blockFragShader.glsl");
 
   // load textures
-  grassTexture = loadTexture("textures/GRASS.png");
-  grassSide = loadTexture("textures/GRASS_SIDE.png");
+  atlas = loadTexture("textures/atlas.png");
 
 
 }
@@ -79,7 +79,7 @@ void Renderer::clear()
 /**
   @brief draws the scene
 */
-void Renderer::draw(Player *player, Window *window, World *world)
+void Renderer::draw(std::shared_ptr<Player> player, std::shared_ptr<Window> window, std::shared_ptr<World> world)
 {
   
   // render the triangle
@@ -91,7 +91,7 @@ void Renderer::draw(Player *player, Window *window, World *world)
   glm::mat4 view;
   view = player->getCameraView();
   glm::mat4 projection;
-  projection = glm::perspective(glm::radians(55.0f), (float)window->width / (float)window->height, 0.1f, 100.0f);
+  projection = glm::perspective(glm::radians(55.0f), (float)window->width / (float)window->height, 0.1f, 500.0f);
 
   // send uniforms to shader
   blockShader->setMat4("view", view);
@@ -100,11 +100,10 @@ void Renderer::draw(Player *player, Window *window, World *world)
 
   // bind textures
   glActiveTexture(GL_TEXTURE0);
-  glBindTexture(GL_TEXTURE_2D, grassTexture);
-  glActiveTexture(GL_TEXTURE1);
-  glBindTexture(GL_TEXTURE_2D, grassSide);
+  glBindTexture(GL_TEXTURE_2D, atlas);
 
-  world->render(blockShader);
+
+  world->render(blockShader, player);
 
   glBindVertexArray(0);
 

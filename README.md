@@ -13,15 +13,6 @@ This is a C++ game engine using OpenGL to render a block-based world. It feature
 - **Custom Shader Management**: Handles vertex and fragment shaders for lighting and texturing.  
 
 
-### **Dependencies**  
-Ensure you have the following installed:  
-- C++17 or later  
-- OpenGL  
-- GLFW (for window and input handling)  
-- GLAD (for OpenGL function loading)  
-- GLM (for matrix and vector math)  
-- stb_image (for texture loading)  
-
 
 ## **Code Structure**  
 ### **Core Components**  
@@ -42,7 +33,7 @@ Ensure you have the following installed:
 ### **Block & World System**  
 - The world consists of **chunks**, each storing blocks in a 3D array.  
 - Only **visible** block faces are rendered to improve performance.  
-- Uses **simplex noise** (if implemented) for terrain generation.  
+- Uses **Perlin noise** for terrain generation.  
 
 ### **Player Movement & Collisions**  
 - Movement controlled via keyboard (`WASD` for movement, `SPACE` for jumping).  
@@ -56,7 +47,6 @@ Ensure you have the following installed:
 
 ## **Future Improvements**  
 - Add lighting and shadows.  
-- Implement a procedural world generator.  
 - Optimize rendering using instancing or greedy meshing.  
 - Improve physics with smoother movement and collision handling.  
 

@@ -7,7 +7,9 @@ enum BlockType
     AIR,
     DIRT,
     GRASS,
-    STONE
+    STONE,
+    WATER,
+    SAND
 };
 
 #endif // BLOCKTYPES_H
