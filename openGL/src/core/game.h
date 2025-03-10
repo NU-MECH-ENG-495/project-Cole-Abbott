@@ -15,15 +15,15 @@ public:
     ~Game();
     void run();
     std::shared_ptr<Player> player;
+    std::shared_ptr<World> world;
+    std::shared_ptr<Window> window;
 
 private:
     void update();
     void render();
 
 
-    std::shared_ptr<Window> window;
     std::shared_ptr<Renderer> renderer;
-    std::shared_ptr<World> world;
 
 
 };

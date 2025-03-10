@@ -43,16 +43,24 @@ void Player::processInput(GLFWwindow *window)
         else if (canJump)
             velocity.y = 7.0f; // Jump velocity
     }
-    if (glfwGetKey(window, GLFW_KEY_LEFT_CONTROL) == GLFW_PRESS) // crouch / fly down
+    if (glfwGetKey(window, GLFW_KEY_LEFT_SHIFT) == GLFW_PRESS) // crouch / fly down
     {
         if (canFly)
             movement.y = -1.0f; // Fly down
     }
-    if (glfwGetKey(window, GLFW_KEY_LEFT_SHIFT) == GLFW_PRESS) // sprint
+    if (glfwGetKey(window, GLFW_KEY_LEFT_CONTROL) == GLFW_PRESS) // sprint
     {
         moveSpeed = canFly ? 40.0f : 12.0f; //move faster if flying
     }
-    
+    if (glfwGetKey(window, GLFW_KEY_F ) == GLFW_PRESS) // fly
+    {
+        canFly = true;
+    }
+    else
+    {
+        canFly = false;
+    }
+
 
     if (movement != glm::vec3(0.0f))
         movement = glm::normalize(movement);
@@ -84,7 +92,7 @@ void Player::update(std::shared_ptr<World> world)
 
     // Apply gravity
     if(!canFly){
-        velocity.y -= 17.0f * deltaTime;
+        velocity.y -= 22.0f * deltaTime;
     }
 
     // Predict new position
@@ -108,9 +116,7 @@ void Player::update(std::shared_ptr<World> world)
         position.z = newPos.z;
     }
     ourCamera.setCameraPos(position);
-    std::cout << "Player position: " << position.x << ", " << position.y << ", " << position.z;
     int yTerrain = PerlinNoise2(position.x, position.z) * 10 + 10;
-    std::cout << " Terrain height: " << yTerrain << std::endl;
 
 }
 
@@ -165,4 +171,59 @@ glm::vec3 Player::getForwardVector()
 glm::vec3 Player::getRightVector()
 {
     return glm::normalize(glm::cross(getForwardVector(), ourCamera.cameraUp));
+}
+
+void Player::processMouseButton(int button, int action, std::shared_ptr<World> world) {
+    if (button == GLFW_MOUSE_BUTTON_LEFT && action == GLFW_PRESS) {
+        // cast a ray into the world to find the block it collides with
+        glm::vec3 rayOrigin = position;
+        glm::vec3 rayDirection = ourCamera.cameraFront;
+        float maxDistance = 5.0f; // Maximum distance to check for blocks
+        int lastX, lastY, lastZ;
+        for (float t = 0; t < maxDistance; t += 0.1f) {
+            glm::vec3 rayPos = rayOrigin + rayDirection * t;
+            int blockX = static_cast<int>(floor(rayPos.x));
+            int blockY = static_cast<int>(floor(rayPos.y));
+            int blockZ = static_cast<int>(floor(rayPos.z));
+
+            // Check if the block is solid
+            if (world->getBlock(blockX, blockY, blockZ) != BlockType::AIR) {
+                // Found a solid block, place a block in front of it
+                world->setBlock(lastX, lastY, lastZ, BlockType::STONE);
+                //check if the block causes a collision
+                if (isColliding(position, size, world))
+                {
+                    world->setBlock(lastX, lastY, lastZ, BlockType::AIR);
+                }
+                break;
+            }
+            lastX = blockX;
+            lastY = blockY;
+            lastZ = blockZ;
+        }
+
+
+        
+    }
+    if (button == GLFW_MOUSE_BUTTON_RIGHT && action == GLFW_PRESS) {
+        // cast a ray into the world to find the block it collides with
+        glm::vec3 rayOrigin = position;
+        glm::vec3 rayDirection = ourCamera.cameraFront;
+        float maxDistance = 5.0f; // Maximum distance to check for blocks
+        for (float t = 0; t < maxDistance; t += 0.1f) {
+            glm::vec3 rayPos = rayOrigin + rayDirection * t;
+            int blockX = static_cast<int>(floor(rayPos.x));
+            int blockY = static_cast<int>(floor(rayPos.y));
+            int blockZ = static_cast<int>(floor(rayPos.z));
+
+            // Check if the block is solid
+            if (world->getBlock(blockX, blockY, blockZ) != BlockType::AIR) {
+                // Found a solid block, remove it
+                world->setBlock(blockX, blockY, blockZ, BlockType::AIR);
+                break;
+            }
+        }
+        
+    }
+    
 }

@@ -41,6 +41,7 @@ Window::Window(int width, int height, const std::string &title)
 
     glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED); 
     glfwSetCursorPosCallback(window, mouse_callback);            // set mouse movement callback
+    glfwSetMouseButtonCallback(window, mouse_button_callback);   // set mouse button callback
 }
 
 
@@ -49,14 +50,22 @@ Window::~Window()
     glfwTerminate();
 }
 
-void Window::framebuffer_size_callback(GLFWwindow *window, int width, int height)
+void Window::framebuffer_size_callback(GLFWwindow *window, int new_width, int new_height)
 {
     // make sure the viewport matches the new window dimensions; note that width and
     // height will be significantly larger than specified on retina displays.
-    glViewport(0, 0, width, height);
+    glViewport(0, 0, new_width, new_height);
+    Game* game = static_cast<Game*>(glfwGetWindowUserPointer(window));
+    game->window->setWindowSize(new_width, new_height);
+
 }
 
+void Window::setWindowSize(int new_width, int new_height)
+{
+    width = new_width;
+    height = new_height;
 
+}
 
 /**
  * @brief Swaps the buffers of the window.
@@ -89,5 +98,12 @@ void Window::mouse_callback(GLFWwindow* window, double xpos, double ypos) {
     Game* game = static_cast<Game*>(glfwGetWindowUserPointer(window));  // Retrieve Game instance
     if (game) {
         game->player->processMouseMovement(xpos, ypos);
+    }
+}
+
+void Window::mouse_button_callback(GLFWwindow* window, int button, int action, int mods) {
+    Game* game = static_cast<Game*>(glfwGetWindowUserPointer(window));  // Retrieve Game instance
+    if (game) {
+        game->player->processMouseButton(button, action, game->world);
     }
 }

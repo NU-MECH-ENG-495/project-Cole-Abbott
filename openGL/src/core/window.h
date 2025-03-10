@@ -25,6 +25,8 @@ public:
     bool shouldClose();
     void processInput(Player& player);
     void setUserPointer(void* ptr);
+    void setWindowSize(int new_width, int new_height);
+
     
     
     int width, height;
@@ -32,6 +34,8 @@ public:
     private: 
     static void framebuffer_size_callback(GLFWwindow *window, int width, int height);
     static void mouse_callback(GLFWwindow* window, double xpos, double ypos);
+    static void mouse_button_callback(GLFWwindow* window, int button, int action, int mods);
+
 
     GLFWwindow* window;
     std::string title;

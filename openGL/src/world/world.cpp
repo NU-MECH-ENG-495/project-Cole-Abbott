@@ -80,7 +80,6 @@ void World::render(Shader* shader, std::shared_ptr<Player> player) {
     //         chunks.erase(std::remove(chunks.begin(), chunks.end(), chunk), chunks.end());
     //     }
     // }
-    std::cout << "Chunks: " << chunks.size() << std::endl;
 }
 
 /**
@@ -121,4 +120,39 @@ BlockType World::getBlock(int x, int y, int z) const {
     return AIR;
 }
 
+
+/**
+ * @brief sets the block type at the given position
+ * 
+ * @param x global x coordinate
+ * @param y global y coordinate
+ * @param z global z coordinate
+ * @param type block type to set
+ */
+void World::setBlock(int x, int y, int z, BlockType type) {
+    // Find the chunk that contains the block
+    int chunkX = x / Chunk::CHUNK_SIZE;
+    int chunkZ = z / Chunk::CHUNK_SIZE;
+
+    //subtract 1 if negative to align with the chunk grid
+    if (x < 0) {
+        chunkX--;
+        if (mod(x,Chunk::CHUNK_SIZE) == 0) {
+            chunkX++;
+        }
+    }
+    if (z < 0) {
+        chunkZ--;
+        if (mod(z,Chunk::CHUNK_SIZE) == 0) {
+            chunkZ++;
+        }
+    }
+
+    for (std::shared_ptr<Chunk> chunk : chunks) {
+        if (chunk->getX() == chunkX && chunk->getZ() == chunkZ) {
+            chunk->setBlock(mod(x,Chunk::CHUNK_SIZE), y, mod(z,Chunk::CHUNK_SIZE), type);
+            break;
+        }
+    }
+}
 

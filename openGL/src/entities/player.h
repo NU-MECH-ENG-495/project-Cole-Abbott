@@ -16,7 +16,7 @@ public:
     glm::vec3 velocity;  // Movement velocity
     glm::vec3 size = glm::vec3(0.6f, 1.8f, 0.6f); // Approximate player size
 
-    const int renderDistance = 6;
+    const int renderDistance = 8;
 
 
     float yaw, pitch;
@@ -27,13 +27,14 @@ public:
     void processMouseMovement(double xpos, double ypos);
 
     void processInput(GLFWwindow* window);
+    void processMouseButton(int button, int action, std::shared_ptr<World> world);
     void update(std::shared_ptr<World> world);
 
 private:
     float lastFrame = 0.0f;
     Camera ourCamera;
     bool canJump = true;
-    bool canFly = true;
+    bool canFly = false;
     float getDeltaTime();
     bool isColliding(glm::vec3 newPos, glm::vec3 size, const std::shared_ptr<World> world);
     glm::vec3 getForwardVector();

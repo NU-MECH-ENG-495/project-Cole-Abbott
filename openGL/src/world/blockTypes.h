@@ -9,7 +9,8 @@ enum BlockType
     GRASS,
     STONE,
     WATER,
-    SAND
+    SAND,
+    OAK_LOG
 };
 
 #endif // BLOCKTYPES_H

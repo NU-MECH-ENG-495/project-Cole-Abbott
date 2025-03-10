@@ -16,11 +16,19 @@ struct Vertex
     glm::vec2 texCoord;
 };
 
+enum BlockSides
+{
+    TOP,
+    SIDE,
+    BOTTOM
+};
+
 class Chunk
 {
 public:
     static const int CHUNK_SIZE = 16;
     static const int CHUNK_HEIGHT = 128;
+    static const int WATER_LEVEL = 56;
 
     Chunk(int x, int y, int z);
     ~Chunk();
@@ -31,7 +39,7 @@ public:
     int getY() const { return y; }
     int getZ() const { return z; }
     BlockType getBlock(int x, int y, int z) const { return blocks[x][y][z]; }
-    void setBlock(int x, int y, int z, BlockType type) { blocks[x][y][z] = type; }
+    void setBlock(int x, int y, int z, BlockType type);
 
 private:
     int x, y, z;
@@ -44,9 +52,10 @@ private:
     Shader *shader;
 
     void addFace(std::vector<Vertex> &vertices, std::vector<uint32_t> &indices,
-                 glm::vec3 position, glm::vec3 normal, glm::vec2 texCoords[4], int &indexCount);
+                 glm::vec3 position, glm::vec3 normal, BlockType type, int &indexCount);
 
     bool isBlockSolid(int x, int y, int z);
+    void calcTexCoords(BlockType type, glm::vec2 texCoords[4], BlockSides side);
 };
 
 #endif // CHUNK_H

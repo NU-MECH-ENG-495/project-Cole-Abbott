@@ -138,7 +138,7 @@ double PerlinNoise2(double x, double y){
     float frequency = 0.01;     // 
     double amplitude = 1; // amplitude of the noise
     int octaves = 5;      // number of octaves
-    double persistence = 0.5;
+    double persistence = 0.75;
 
     for (int i = 0; i < octaves; i++)
     {
