@@ -6,7 +6,8 @@
 #include <glm/gtc/type_ptr.hpp>
 
 #include "camera.h"
-// #include "world/world.h"
+#include "world/blockTypes.h"
+
 class World;
 
 class Player
@@ -39,6 +40,8 @@ private:
     bool isColliding(glm::vec3 newPos, glm::vec3 size, const std::shared_ptr<World> world);
     glm::vec3 getForwardVector();
     glm::vec3 getRightVector();
+    BlockType blockInHand = OAK_PLANK;
+    void processBlockInHandInput(GLFWwindow* window);
 };
 
 #endif

@@ -348,6 +348,9 @@ void Chunk::calcTexCoords(BlockType type, glm::vec2 texCoords[4], BlockSides sid
         else if (side == TOP || side == BOTTOM)
             offset.x += 3 * cubeSize;
         break;
+    case OAK_PLANK: // 0,2 on all sides
+        offset.y += 2 * cubeSize;
+        break;
     default:
         break;
     }

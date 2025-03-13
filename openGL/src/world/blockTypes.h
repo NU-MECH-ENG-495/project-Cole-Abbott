@@ -10,7 +10,8 @@ enum BlockType
     STONE,
     WATER,
     SAND,
-    OAK_LOG
+    OAK_LOG,
+    OAK_PLANK
 };
 
 #endif // BLOCKTYPES_H

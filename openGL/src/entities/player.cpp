@@ -3,16 +3,34 @@
 #include "world/world.h"
 
 
+/**
+ * @brief Construct a new Player:: Player object
+ * 
+ * @param _playerPos Initial position of the player
+ * @param _yaw Initial yaw of the player
+ * @param _pitch Initial pitch of the player
+ */
 Player::Player(glm::vec3 _playerPos, float _yaw, float _pitch)
     : position(_playerPos), yaw(_yaw), pitch(_pitch), ourCamera(_playerPos, _yaw, _pitch)
 {
 }
 
+/**
+ * @brief Returns the position of the player
+ * 
+ * @return glm::vec3 Position of the player
+ */
 glm::mat4 Player::getCameraView() const
 {
     return ourCamera.cameraView();
 }
 
+/**
+ * @brief Processes mouse movement input and updates the camera's yaw and pitch
+ * 
+ * @param xpos New x position of the mouse
+ * @param ypos New y position of the mouse
+ */
 void Player::processMouseMovement(double xpos, double ypos)
 {
     ourCamera.mouseMovement(xpos, ypos);
@@ -41,7 +59,7 @@ void Player::processInput(GLFWwindow *window)
         if (canFly)
             movement.y = 1.0f; // Fly up
         else if (canJump)
-            velocity.y = 7.0f; // Jump velocity
+            velocity.y = 7.5f; // Jump velocity
     }
     if (glfwGetKey(window, GLFW_KEY_LEFT_SHIFT) == GLFW_PRESS) // crouch / fly down
     {
@@ -60,6 +78,7 @@ void Player::processInput(GLFWwindow *window)
     {
         canFly = false;
     }
+    processBlockInHandInput(window);
 
 
     if (movement != glm::vec3(0.0f))
@@ -120,6 +139,11 @@ void Player::update(std::shared_ptr<World> world)
 
 }
 
+/**
+ * @brief Returns the delta time since the last frame
+ * 
+ * @return float Delta time
+ */
 float Player::getDeltaTime()
 {
     float currentFrame = glfwGetTime();
@@ -161,6 +185,11 @@ bool Player::isColliding(glm::vec3 newPos, glm::vec3 size, const std::shared_ptr
     return false;
 }
 
+/**
+ * @brief Returns the forward vector of the player
+ * 
+ * @return glm::vec3 Forward vector
+ */
 glm::vec3 Player::getForwardVector()
 {
     glm::vec3 front = ourCamera.cameraFront;
@@ -168,13 +197,26 @@ glm::vec3 Player::getForwardVector()
     return glm::normalize(front);
 }
 
+/**
+ * @brief Returns the right vector of the player
+ * 
+ * @return glm::vec3 Right vector
+ */
 glm::vec3 Player::getRightVector()
 {
     return glm::normalize(glm::cross(getForwardVector(), ourCamera.cameraUp));
 }
 
-void Player::processMouseButton(int button, int action, std::shared_ptr<World> world) {
-    if (button == GLFW_MOUSE_BUTTON_LEFT && action == GLFW_PRESS) {
+
+/**
+ * @brief Processes mouse button input for placing and removing blocks
+ * 
+ * @param button Mouse button that was pressed
+ * @param action Action of the mouse button (press or release)
+ * @param world Pointer to the world object
+ */
+void Player::processMouseButton(int button, int action, std::shared_ptr<World> world) { 
+    if (button == GLFW_MOUSE_BUTTON_LEFT && action == GLFW_PRESS) {// place block
         // cast a ray into the world to find the block it collides with
         glm::vec3 rayOrigin = position;
         glm::vec3 rayDirection = ourCamera.cameraFront;
@@ -189,7 +231,7 @@ void Player::processMouseButton(int button, int action, std::shared_ptr<World> w
             // Check if the block is solid
             if (world->getBlock(blockX, blockY, blockZ) != BlockType::AIR) {
                 // Found a solid block, place a block in front of it
-                world->setBlock(lastX, lastY, lastZ, BlockType::STONE);
+                world->setBlock(lastX, lastY, lastZ, blockInHand);
                 //check if the block causes a collision
                 if (isColliding(position, size, world))
                 {
@@ -205,7 +247,7 @@ void Player::processMouseButton(int button, int action, std::shared_ptr<World> w
 
         
     }
-    if (button == GLFW_MOUSE_BUTTON_RIGHT && action == GLFW_PRESS) {
+    if (button == GLFW_MOUSE_BUTTON_RIGHT && action == GLFW_PRESS) {// remove block
         // cast a ray into the world to find the block it collides with
         glm::vec3 rayOrigin = position;
         glm::vec3 rayDirection = ourCamera.cameraFront;
@@ -223,7 +265,47 @@ void Player::processMouseButton(int button, int action, std::shared_ptr<World> w
                 break;
             }
         }
-        
+    }
+    if (button == GLFW_MOUSE_BUTTON_MIDDLE && action == GLFW_PRESS) { // pick block
+        // cast a ray into the world to find the block it collides with
+        glm::vec3 rayOrigin = position;
+        glm::vec3 rayDirection = ourCamera.cameraFront;
+        float maxDistance = 5.0f; // Maximum distance to check for blocks
+        for (float t = 0; t < maxDistance; t += 0.1f) {
+            glm::vec3 rayPos = rayOrigin + rayDirection * t;
+            int blockX = static_cast<int>(floor(rayPos.x));
+            int blockY = static_cast<int>(floor(rayPos.y));
+            int blockZ = static_cast<int>(floor(rayPos.z));
+
+            // Check if the block is solid
+            if (world->getBlock(blockX, blockY, blockZ) != BlockType::AIR) {
+                blockInHand = world->getBlock(blockX, blockY, blockZ);
+                break;
+            }
+        }
     }
     
+}
+
+/**
+ * @brief Processes input for changing the block in hand
+ * 
+ * @param window Pointer to the GLFW window
+ */
+void Player::processBlockInHandInput(GLFWwindow *window)
+{
+    if (glfwGetKey(window, GLFW_KEY_1) == GLFW_PRESS)
+        blockInHand = BlockType::DIRT;
+    if (glfwGetKey(window, GLFW_KEY_2) == GLFW_PRESS)
+        blockInHand = BlockType::GRASS;
+    if (glfwGetKey(window, GLFW_KEY_3) == GLFW_PRESS)
+        blockInHand = BlockType::STONE;
+    if (glfwGetKey(window, GLFW_KEY_4) == GLFW_PRESS)
+        blockInHand = BlockType::WATER;
+    if (glfwGetKey(window, GLFW_KEY_5) == GLFW_PRESS)
+        blockInHand = BlockType::SAND;
+    if (glfwGetKey(window, GLFW_KEY_6) == GLFW_PRESS)
+        blockInHand = BlockType::OAK_LOG;
+    if (glfwGetKey(window, GLFW_KEY_7) == GLFW_PRESS)
+        blockInHand = BlockType::OAK_PLANK;
 }
