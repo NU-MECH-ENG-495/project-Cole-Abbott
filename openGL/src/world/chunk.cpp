@@ -11,24 +11,7 @@ glm::vec3 cubeVertices[6] = {
     glm::vec3(-0.5f, -0.5f, -0.5f),
 };
 
-// glm::vec2 topTexCoords[4] = {
-//     glm::vec2(0.0f, 0.0f),
-//     glm::vec2(1.0f, 0.0f),
-//     glm::vec2(1.0f, 1.0f),
-//     glm::vec2(0.0f, 1.0f),
-// };
-// glm::vec2 topTexCoords[4] = {
-//     glm::vec2(0.0f, 0.0f),
-//     glm::vec2(0.25f, 0.0f),
-//     glm::vec2(0.25f, 0.25f),
-//     glm::vec2(0.0f, 0.25f),
-// };
-// glm::vec2 sideTexCoords[4] = {
-//     glm::vec2(0.25f, 0.25f),
-//     glm::vec2(0.5f, 0.25f),
-//     glm::vec2(0.5f, 0.0f),
-//     glm::vec2(0.25f, 0.0f),
-// };
+
 
 glm::vec2 atlasIndex[4] = {
     glm::vec2(0.0f, 0.25f),
