@@ -40,7 +40,7 @@ This is a C++ game engine using OpenGL to render a block-based world. It feature
 
 ![alt text](openGL/images/terrain.png)
 
-- Textures are loaded from a texture offsets and applied to blocks with TexCoord offsets
+- Textures are loaded from a texture atlas and offsets are applied to blocks with TexCoord offsets
 
 ![alt text](openGL/images/atlasImage.png)
 
@@ -68,7 +68,7 @@ It works by generating random points and interpolating between them with a cosin
 
 ![alt text](openGL/images/InterpolatedPoints.png)
 
-Multiple octaves (noise with higher frequncy but lower amplitude) of perlin noise can be combined to create more complex patterns. The noise function can be scaled and offset to create different effects.
+Multiple octaves (noise with higher frequncy but lower amplitude) of perlin noise can be combined to create more complex patterns. The noise functions can be scaled and offset to create different effects.
 
 ![alt text](openGL/images/1DPerlinNoise.png)
 

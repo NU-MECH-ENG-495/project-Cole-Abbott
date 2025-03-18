@@ -21,9 +21,6 @@ World::World() {
 }
 
 World::~World() {
-    // for (<Chunk>* chunk : chunks) {
-    //     delete chunk;
-    // }
 }
 
 /**
@@ -65,7 +62,7 @@ void World::render(Shader* shader, std::shared_ptr<Player> player) {
             }
             // if not, create it
             if (!found) {
-                // chunks.push_back(std::make_shared<Chunk>(x, 0, z));
+                chunks.push_back(std::make_shared<Chunk>(x, 0, z));
             }
             
         }

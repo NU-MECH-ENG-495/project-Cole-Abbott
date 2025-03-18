@@ -1,3 +1,6 @@
+// This code was taken from learnopengl.com
+// https://learnopengl.com/Getting-started/Shaders
+
 #ifndef SHADER_H
 #define SHADER_H
 
